@@ -1,8 +1,8 @@
-FROM alpine:3.16
+FROM alpine:3.17
 
 # Install the packages we need. Avahi will be included
 RUN echo -e "https://dl-cdn.alpinelinux.org/alpine/edge/testing\nhttps://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories &&\
-	apk add --update cups \
+	apk --no-cache add cups \
 	cups-libs \
 	cups-pdf \
 	cups-client \
@@ -23,9 +23,8 @@ RUN echo -e "https://dl-cdn.alpinelinux.org/alpine/edge/testing\nhttps://dl-cdn.
 	build-base \
 	wget \
 	rsync \
-	&& pip3 --no-cache-dir install --upgrade pip \
-	&& pip3 install pycups \
-	&& rm -rf /var/cache/apk/*
+	&& pip3 install --no-cache-dir --upgrade pip \
+	&& pip3 install --no-cache-dir pycups
 
 # This will use port 631
 EXPOSE 631
@@ -35,7 +34,7 @@ VOLUME /config
 VOLUME /services
 
 # Add scripts
-ADD root /
+COPY root /
 RUN chmod +x /root/*
 
 #Run Script

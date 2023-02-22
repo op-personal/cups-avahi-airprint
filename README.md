@@ -1,6 +1,6 @@
-# chuckcharlie/cups-avahi-airprint
+# op-personal/cups-avahi-airprint
 
-Fork from [quadportnick/docker-cups-airprint](https://github.com/quadportnick/docker-cups-airprint)
+Fork from [chuckcharlie/cups-avahi-airprint](https://github.com/chuckcharlie/cups-avahi-airprint)
 
 ### Now supports ARM64 and AMD64!
 Use the *latest* or *version#* tags to auto choose the right architecture.
