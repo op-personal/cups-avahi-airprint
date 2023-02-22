@@ -20,11 +20,10 @@ RUN echo -e "https://dl-cdn.alpinelinux.org/alpine/edge/testing\nhttps://dl-cdn.
 	python3 \
 	python3-dev \
 	py3-pip \
+	py3-pycups \
 	build-base \
 	wget \
-	rsync \
-	&& pip3 install --no-cache-dir --upgrade pip \
-	&& pip3 install --no-cache-dir pycups
+	rsync
 
 # This will use port 631
 EXPOSE 631
