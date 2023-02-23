@@ -39,9 +39,6 @@ VOLUME /services
 COPY root /
 RUN chmod +x /root/*
 
-#Run Script
-CMD ["/root/run_cups.sh"]
-
 # Baked-in config file changes
 RUN sed -i 's/Listen localhost:631/Port 631/' /etc/cups/cupsd.conf && \
 	sed -i 's/Browsing Off/Browsing On/' /etc/cups/cupsd.conf && \
@@ -51,3 +48,6 @@ RUN sed -i 's/Listen localhost:631/Port 631/' /etc/cups/cupsd.conf && \
 	sed -i 's/.*enable\-dbus=.*/enable\-dbus\=no/' /etc/avahi/avahi-daemon.conf && \
 	echo "ServerAlias *" >> /etc/cups/cupsd.conf && \
 	echo "DefaultEncryption Never" >> /etc/cups/cupsd.conf
+
+#Run Script
+CMD ["/root/run_cups.sh"]
