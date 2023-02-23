@@ -1,7 +1,9 @@
 FROM alpine:3.17
 
 # Install the packages we need. Avahi will be included
-RUN echo -e "https://dl-cdn.alpinelinux.org/alpine/edge/testing\nhttps://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories &&\
+RUN printf "https://dl-cdn.alpinelinux.org/alpine/edge/testing\n" >> /etc/apk/repositories && \
+        printf "https://dl-cdn.alpinelinux.org/alpine/edge/main\n" >> /etc/apk/repositories && \
+	printf "https://dl-cdn.alpinelinux.org/alpine/edge/community\n" >> /etc/apk/repositories && \
 	apk --no-cache add cups \
 	cups-libs \
 	cups-pdf \
@@ -23,7 +25,8 @@ RUN echo -e "https://dl-cdn.alpinelinux.org/alpine/edge/testing\nhttps://dl-cdn.
 	py3-pycups \
 	build-base \
 	wget \
-	rsync
+	rsync \
+	shadow
 
 # This will use port 631
 EXPOSE 631
