@@ -4,16 +4,16 @@ set -x
 
 # Is CUPSADMIN set? If not, set to default
 if [ -z "$CUPSADMIN" ]; then
-    CUPSADMIN="cupsadmin"
+	CUPSADMIN="cupsadmin"
 fi
 
 # Is CUPSPASSWORD set? If not, set to $CUPSADMIN
 if [ -z "$CUPSPASSWORD" ]; then
-    CUPSPASSWORD=$CUPSADMIN
+	CUPSPASSWORD=$CUPSADMIN
 fi
 
 if [ "$(grep -ci "$CUPSADMIN" /etc/shadow)" -eq 0 ]; then
-    adduser -S -G lpadmin --no-create-home "$CUPSADMIN" 
+	adduser -S -G lpadmin --no-create-home "$CUPSADMIN"
 fi
 echo "$CUPSADMIN":"$CUPSPASSWORD" | chpasswd
 
@@ -26,28 +26,29 @@ if [ "$(ls -l /services/*.service 2>/dev/null | wc -l)" -gt 0 ]; then
 	cp -f /services/*.service /etc/avahi/services/
 fi
 if [ "$(ls -l /config/printers.conf 2>/dev/null | wc -l)" -eq 0 ]; then
-    touch /config/printers.conf
+	touch /config/printers.conf
 fi
 cp /config/printers.conf /etc/cups/printers.conf
 
 if [ "$(ls -l /config/cupsd.conf 2>/dev/null | wc -l)" -ne 0 ]; then
-    cp /config/cupsd.conf /etc/cups/cupsd.conf
+	cp /config/cupsd.conf /etc/cups/cupsd.conf
 fi
 
-printerUpdate () {
-	/usr/bin/inotifywait -m -e close_write,moved_to,create /etc/cups | 
-	while read -r directory events filename; do
-		if [ "$filename" = "printers.conf" ]; then
-			rm -rf /services/AirPrint-*.service
-			/root/airprint-generate.py -d /services
-			cp /etc/cups/printers.conf /config/printers.conf
-			rsync -avh /services/ /etc/avahi/services/
-		fi
-		if [ "$filename" = "cupsd.conf" ]; then
-			cp /etc/cups/cupsd.conf /config/cupsd.conf
-		fi
-	done
+printerUpdate() {
+	/usr/bin/inotifywait -m -e close_write,moved_to,create /etc/cups |
+		while read -r directory events filename; do
+			if [ "$filename" = "printers.conf" ]; then
+				rm -rf /services/AirPrint-*.service
+				/root/airprint-generate.py -d /services
+				cp /etc/cups/printers.conf /config/printers.conf
+				rsync -avh /services/ /etc/avahi/services/
+			fi
+			if [ "$filename" = "cupsd.conf" ]; then
+				cp /etc/cups/cupsd.conf /config/cupsd.conf
+			fi
+		done
 }
 
 /usr/sbin/avahi-daemon --daemonize --no-drop-root
-printerUpdate & exec /usr/sbin/cupsd -f
+printerUpdate &
+exec /usr/sbin/cupsd -f
