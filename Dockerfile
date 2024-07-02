@@ -1,4 +1,4 @@
-FROM alpine:3.19
+FROM alpine:3.20
 
 # Install the packages we need. Avahi will be included
 RUN printf "https://dl-cdn.alpinelinux.org/alpine/edge/testing\n" >> /etc/apk/repositories && \
@@ -49,5 +49,5 @@ RUN sed -i 's/Listen localhost:631/Port 631/' /etc/cups/cupsd.conf && \
 	echo "ServerAlias *" >> /etc/cups/cupsd.conf && \
 	echo "DefaultEncryption Never" >> /etc/cups/cupsd.conf
 
-#Run Script
+# Run Script
 CMD ["/root/run_cups.sh"]
