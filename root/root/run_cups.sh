@@ -3,20 +3,18 @@ set -e
 set -x
 
 # Set default values for CUPSADMIN and CUPSPASSWORD
-: "${CUPSADMIN:=cupsadmin}"
-: "${CUPSPASSWORD:=$CUPSADMIN}"
+CUPSADMIN=${CUPSADMIN:-cupsadmin}
+CUPSPASSWORD=${CUPSPASSWORD:-$CUPSADMIN}
 
 # Create user if not exists
 if [ "$(grep -ci "$CUPSADMIN" /etc/shadow)" -eq 0 ]; then
 	adduser -S -G lpadmin --no-create-home "$CUPSADMIN"
 fi
-echo "$CUPSADMIN":"$CUPSPASSWORD" | chpasswd
+echo "$CUPSADMIN:$CUPSPASSWORD" | chpasswd
 
 # Create directories and perform cleanup
-mkdir -p /config/ppd
-mkdir -p /services
-rm -rf /etc/avahi/services/*
-rm -rf /etc/cups/ppd
+mkdir -p /config/ppd /services
+rm -rf /etc/avahi/services/* /etc/cups/ppd
 ln -s /config/ppd /etc/cups
 
 # Copy service files if they exist
@@ -54,6 +52,6 @@ printerUpdate() {
 }
 
 # Start avahi daemon and printerUpdate function
-/usr/sbin/avahi-daemon --daemonize --no-drop-root
+/usr/sbin/avahi-daemon --daemonize --no-drop-root &
 printerUpdate &
 exec /usr/sbin/cupsd -f
