@@ -4,6 +4,7 @@ FROM alpine:3.21
 RUN printf "https://dl-cdn.alpinelinux.org/alpine/edge/testing\n" >> /etc/apk/repositories && \
 	printf "https://dl-cdn.alpinelinux.org/alpine/edge/main\n" >> /etc/apk/repositories && \
 	printf "https://dl-cdn.alpinelinux.org/alpine/edge/community\n" >> /etc/apk/repositories && \
+ 	apk --no-cache upgrade && \
 	apk --no-cache add cups \
 	cups-libs \
 	cups-pdf \
