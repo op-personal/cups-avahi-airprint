@@ -1,4 +1,4 @@
-FROM alpine:3.21
+FROM alpine:3.21.2
 
 # Install the packages we need. Avahi will be included
 RUN printf "https://dl-cdn.alpinelinux.org/alpine/edge/testing\n" >> /etc/apk/repositories && \
